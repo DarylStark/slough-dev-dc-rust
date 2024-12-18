@@ -20,7 +20,7 @@ jobs:
           else
             export MAIN_TAG="${GITHUB_REF_NAME}"
           fi
-          echo "::set-output tag_name="${REPO_NAME}:${MAIN_TAG},${REPO_NAME}:${GITHUB_SHA}""
+          echo "::set-output tag_name="${REPO_NAME}:${MAIN_TAG},${REPO_NAME}:${GITHUB_SHA}"" >> "$GITHUB_OUTPUT"
         shell: bash
   
   debug:
