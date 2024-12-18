@@ -4,7 +4,7 @@ on:
 
 jobs:
   tag-generation:
-    name: Container Project
+    name: Generate tags
     runs-on: ubuntu-latest
     outputs:
       tag-name: ${{ steps.set-tags.outputs.tag-name }}
@@ -19,7 +19,7 @@ jobs:
           if [ "${{ github.ref_name }}" == "main" ]; then
             export MAIN_TAG="latest"
           elif [ "${{ github.ref_name }}" == "dev" ]; then
-            export MAIN_TAG="dev-latest"
+            export MAIN_TAG="latest-dev"
           fi
           echo "tag-name="${DOCKER_USERNAME}/${REPO_NAME}:${MAIN_TAG},${DOCKER_USERNAME}/${REPO_NAME}:${GITHUB_SHA}"" >> "$GITHUB_OUTPUT"
         shell: bash
@@ -30,7 +30,7 @@ jobs:
     needs: tag-generation
     with:
       enable-ci: true
-      enable-cd: ${{ github.ref_name == 'main' }}
+      enable-cd: ${{ github.ref_name == 'main' || github.ref_name == 'dev' }}
       container-tags: ${{ needs.tag-generation.outputs.tag-name }}
     secrets:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
