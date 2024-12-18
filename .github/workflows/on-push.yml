@@ -5,7 +5,27 @@ on:
 jobs:
   container-project:
     name: Container Project
-    uses: DarylStark/slough-gha-wf-container-projects/.github/workflows/workflow.yml@issue-10/feature/new-workflows
-    with:
-      enable-ci: true
-      enable-cd: ${{ github.ref_name == 'main' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set container tags
+        id: set-tags
+        run: |
+          export REPO_NAME=$(echo ${GITHUB_REPOSITORY} | cut -d '/' -f 2)
+          if [ "${{ github.ref_name }}" == "main" ]; then
+            export MAIN_TAG="latest"
+          elif [ "${{ github.ref_name }}" == "dev" ]; then
+            export MAIN_TAG="dev-latest"
+          else
+            export MAIN_TAG="${GITHUB_REF_NAME}"
+          echo "TAGS=\"${REPO_NAME}:${MAIN_TAG},${REPO_NAME}:${GITHUB_SHA}\"" >> $GITHUB_ENV
+        shell: bash
+      
+      - name: Debug tags
+        run: echo "${{ env.TAGS }}"
+
+      - name: Run reusable workflow
+        uses: DarylStark/slough-gha-wf-container-projects/.github/workflows/workflow.yml@issue-10/feature/new-workflows
+        with:
+          enable-ci: true
+          enable-cd: ${{ github.ref_name == 'main' }}
+          container-tags: ${{ env.TAGS }}
