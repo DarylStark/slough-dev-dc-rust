@@ -25,7 +25,7 @@ jobs:
         shell: bash
       
       - name: Debug tags
-        run: echo "${{ steps.set-tags.outputs.tag-name }}"
+        run: echo "${TAGS}"
 
   container-project-workflow:
     name: Run reusable workflow
