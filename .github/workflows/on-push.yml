@@ -21,7 +21,7 @@ jobs:
           elif [ "${{ github.ref_name }}" == "dev" ]; then
             export MAIN_TAG="dev-latest"
           fi
-          echo "tag-name="R{DOCKER_USERNAME}/${REPO_NAME}:${MAIN_TAG},${DOCKER_USERNAME}/${REPO_NAME}:${GITHUB_SHA}"" >> "$GITHUB_OUTPUT"
+          echo "tag-name="${DOCKER_USERNAME}/${REPO_NAME}:${MAIN_TAG},${DOCKER_USERNAME}/${REPO_NAME}:${GITHUB_SHA}"" >> "$GITHUB_OUTPUT"
         shell: bash
 
   container-project-workflow:
