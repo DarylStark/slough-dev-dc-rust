@@ -6,5 +6,6 @@ jobs:
   container-project:
     name: Container Project
     uses: DarylStark/slough-gha-wf-container-projects/.github/workflows/workflow.yml@issue-10/feature/new-workflows
-    enable_ci: false
-    enable_cd: false
+    with:
+      enable-ci: false
+      enable-cd: false
