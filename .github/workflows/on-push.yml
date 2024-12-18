@@ -22,9 +22,14 @@ jobs:
           fi
           echo "::set-output tag_name="${REPO_NAME}:${MAIN_TAG},${REPO_NAME}:${GITHUB_SHA}""
         shell: bash
-      
+  
+  debug:
+    name: Debug
+    runs-on: ubuntu-latest
+    needs: tag-generation
+    steps:
       - name: Debug tags
-        run: echo "${TAGS}"
+        run: echo "${{ needs.tag-generation.outputs.tag-name }}"
 
   container-project-workflow:
     name: Container Project
