@@ -1,0 +1,33 @@
+---
+on:
+  push:
+
+jobs:
+  tag-generation:
+    name: Container Project
+    runs-on: ubuntu-latest
+    outputs:
+      tag-name: ${{ steps.set-tags.outputs.tag-name }}
+    steps:
+      - name: Set container tags
+        id: set-tags
+        run: |
+          export REPO_NAME=$(echo ${GITHUB_REPOSITORY} | cut -d '/' -f 2)
+          if [ "${{ github.ref_name }}" == "main" ]; then
+            export MAIN_TAG="latest"
+          elif [ "${{ github.ref_name }}" == "dev" ]; then
+            export MAIN_TAG="dev-latest"
+          else
+            export MAIN_TAG="${GITHUB_REF_NAME}"
+          fi
+          echo "tag-name="${REPO_NAME}:${MAIN_TAG},${REPO_NAME}:${GITHUB_SHA}"" >> "$GITHUB_OUTPUT"
+        shell: bash
+
+  container-project-workflow:
+    name: Container Project
+    uses: DarylStark/slough-gha-wf-container-projects/.github/workflows/workflow.yml@issue-10/feature/new-workflows
+    needs: tag-generation
+    with:
+      enable-ci: true
+      enable-cd: ${{ github.ref_name == 'main' }}
+      container-tags: ${{ needs.tag-generation.outputs.tag-name }}
