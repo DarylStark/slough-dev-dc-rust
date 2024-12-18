@@ -3,7 +3,7 @@ on:
   push:
 
 jobs:
-  container-project:
+  tag-generation:
     name: Container Project
     runs-on: ubuntu-latest
     steps:
@@ -23,9 +23,11 @@ jobs:
       - name: Debug tags
         run: echo "${{ env.TAGS }}"
 
-      - name: Run reusable workflow
-        uses: DarylStark/slough-gha-wf-container-projects/.github/workflows/workflow.yml@issue-10/feature/new-workflows
-        with:
-          enable-ci: true
-          enable-cd: ${{ github.ref_name == 'main' }}
-          container-tags: ${{ env.TAGS }}
+  container-project-workflow:
+    name: Run reusable workflow
+    uses: DarylStark/slough-gha-wf-container-projects/.github/workflows/workflow.yml@issue-10/feature/new-workflows
+    needs: tag-generation
+    with:
+      enable-ci: true
+      enable-cd: ${{ github.ref_name == 'main' }}
+      container-tags: ${{ env.TAGS }}
