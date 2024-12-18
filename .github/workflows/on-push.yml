@@ -20,7 +20,6 @@ jobs:
           else
             export MAIN_TAG="${GITHUB_REF_NAME}"
           fi
-          echo "TAGS=\"${REPO_NAME}:${MAIN_TAG},${REPO_NAME}:${GITHUB_SHA}\"" >> $GITHUB_ENV
           echo "::set-output tag_name="${REPO_NAME}:${MAIN_TAG},${REPO_NAME}:${GITHUB_SHA}""
         shell: bash
       
@@ -28,7 +27,7 @@ jobs:
         run: echo "${TAGS}"
 
   container-project-workflow:
-    name: Run reusable workflow
+    name: Container Project
     uses: DarylStark/slough-gha-wf-container-projects/.github/workflows/workflow.yml@issue-10/feature/new-workflows
     needs: tag-generation
     with:
