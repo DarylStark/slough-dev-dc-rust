@@ -8,19 +8,20 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       tag-name: ${{ steps.set-tags.outputs.tag-name }}
+    env:
+      DOCKER_USERNAME: dast1986
     steps:
       - name: Set container tags
         id: set-tags
         run: |
           export REPO_NAME=$(echo ${GITHUB_REPOSITORY} | cut -d '/' -f 2)
+          export MAIN_TAG="${GITHUB_REF_NAME}"
           if [ "${{ github.ref_name }}" == "main" ]; then
             export MAIN_TAG="latest"
           elif [ "${{ github.ref_name }}" == "dev" ]; then
             export MAIN_TAG="dev-latest"
-          else
-            export MAIN_TAG="${GITHUB_REF_NAME}"
           fi
-          echo "tag-name="${REPO_NAME}:${MAIN_TAG},${REPO_NAME}:${GITHUB_SHA}"" >> "$GITHUB_OUTPUT"
+          echo "tag-name="R{DOCKER_USERNAME}/${REPO_NAME}:${MAIN_TAG},${DOCKER_USERNAME}/${REPO_NAME}:${GITHUB_SHA}"" >> "$GITHUB_OUTPUT"
         shell: bash
 
   container-project-workflow:
