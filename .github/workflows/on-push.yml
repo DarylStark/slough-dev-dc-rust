@@ -31,3 +31,6 @@ jobs:
       enable-ci: true
       enable-cd: ${{ github.ref_name == 'main' }}
       container-tags: ${{ needs.tag-generation.outputs.tag-name }}
+    secrets:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
