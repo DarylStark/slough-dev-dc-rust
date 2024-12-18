@@ -6,6 +6,8 @@ jobs:
   tag-generation:
     name: Container Project
     runs-on: ubuntu-latest
+    outputs:
+      tag-name: ${{ steps.set-tags.outputs.tag-name }}
     steps:
       - name: Set container tags
         id: set-tags
@@ -18,10 +20,11 @@ jobs:
           else
             export MAIN_TAG="${GITHUB_REF_NAME}"
           echo "TAGS=\"${REPO_NAME}:${MAIN_TAG},${REPO_NAME}:${GITHUB_SHA}\"" >> $GITHUB_ENV
+          echo "::set-output tag_name="${REPO_NAME}:${MAIN_TAG},${REPO_NAME}:${GITHUB_SHA}""
         shell: bash
       
       - name: Debug tags
-        run: echo "${{ env.TAGS }}"
+        run: echo "${{ steps.set-tags.outputs.tag-name }}"
 
   container-project-workflow:
     name: Run reusable workflow
@@ -30,4 +33,4 @@ jobs:
     with:
       enable-ci: true
       enable-cd: ${{ github.ref_name == 'main' }}
-      container-tags: ${{ env.TAGS }}
+      container-tags: ${{ needs.tag-generation.outputs.tag-name }}
