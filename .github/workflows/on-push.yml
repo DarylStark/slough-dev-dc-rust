@@ -5,7 +5,7 @@ on:
 jobs:
   container-project-workflow:
     name: Container Project
-    uses: DarylStark/slough-gha-wf-container-projects/.github/workflows/workflow.yml@issue-10/feature/new-workflows
+    uses: DarylStark/slough-gha-wf-container-projects/.github/workflows/workflow.yml@main
     with:
       enable-ci: true
       enable-cd: ${{ github.ref_name == 'main' || github.ref_name == 'dev' }}
