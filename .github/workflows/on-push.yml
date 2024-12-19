@@ -3,35 +3,27 @@ on:
   push:
 
 jobs:
-  tag-generation:
+  generate-tags:
     name: Generate tags
     runs-on: ubuntu-latest
     outputs:
-      tag-name: ${{ steps.set-tags.outputs.tag-name }}
-    env:
-      DOCKER_USERNAME: dast1986
+      tag-name: ${{ steps.generate-tags.outputs.tags }}
     steps:
       - name: Set container tags
-        id: set-tags
-        run: |
-          export REPO_NAME=$(echo ${GITHUB_REPOSITORY} | cut -d '/' -f 2)
-          export MAIN_TAG="${GITHUB_REF_NAME}"
-          if [ "${{ github.ref_name }}" == "main" ]; then
-            export MAIN_TAG="latest"
-          elif [ "${{ github.ref_name }}" == "dev" ]; then
-            export MAIN_TAG="latest-dev"
-          fi
-          echo "tag-name="${DOCKER_USERNAME}/${REPO_NAME}:${MAIN_TAG},${DOCKER_USERNAME}/${REPO_NAME}:${GITHUB_SHA}"" >> "$GITHUB_OUTPUT"
-        shell: bash
+        id: generate-tags
+        uses: DarylStark/slough-gha-ac-container-tag-generator@v1
+        with:
+          container-repository: DarylStark
+          version: 1.0.0
 
   container-project-workflow:
     name: Container Project
     uses: DarylStark/slough-gha-wf-container-projects/.github/workflows/workflow.yml@issue-10/feature/new-workflows
-    needs: tag-generation
+    needs: generate-tags
     with:
       enable-ci: true
       enable-cd: ${{ github.ref_name == 'main' || github.ref_name == 'dev' }}
-      container-tags: ${{ needs.tag-generation.outputs.tag-name }}
+      container-tags: ${{ needs.generate-tags.outputs.tags }}
     secrets:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
