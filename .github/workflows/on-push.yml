@@ -3,27 +3,15 @@ on:
   push:
 
 jobs:
-  generate-tags:
-    name: Generate tags
-    runs-on: ubuntu-latest
-    outputs:
-      tags: ${{ steps.generate-tags.outputs.tags }}
-    steps:
-      - name: Set container tags
-        id: generate-tags
-        uses: DarylStark/slough-gha-ac-container-tag-generator@v1
-        with:
-          container-repository: dast1986
-          version: 1.0.0
 
   container-project-workflow:
     name: Container Project
     uses: DarylStark/slough-gha-wf-container-projects/.github/workflows/workflow.yml@issue-10/feature/new-workflows
-    needs: generate-tags
     with:
       enable-ci: true
       enable-cd: ${{ github.ref_name == 'main' || github.ref_name == 'dev' }}
-      container-tags: ${{ needs.generate-tags.outputs.tags }}
+      container-repository: dast1986
+      version: 1.0.0
     secrets:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
