@@ -13,7 +13,7 @@ jobs:
         id: generate-tags
         uses: DarylStark/slough-gha-ac-container-tag-generator@v1
         with:
-          container-repository: DarylStark
+          container-repository: dast1986
           version: 1.0.0
 
   container-project-workflow:
