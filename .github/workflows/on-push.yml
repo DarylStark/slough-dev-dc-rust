@@ -7,7 +7,7 @@ jobs:
     name: Generate tags
     runs-on: ubuntu-latest
     outputs:
-      tag-name: ${{ steps.generate-tags.outputs.tags }}
+      tags: ${{ steps.generate-tags.outputs.tags }}
     steps:
       - name: Set container tags
         id: generate-tags
