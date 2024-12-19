@@ -10,7 +10,6 @@ jobs:
     with:
       enable-ci: true
       enable-cd: ${{ github.ref_name == 'main' || github.ref_name == 'dev' }}
-      container-tags: ${{ needs.generate-tags.outputs.tags }}
       container-repository: dast1986
       version: 1.0.0
     secrets:
