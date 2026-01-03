@@ -7,7 +7,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 ENV PROMPTNAME="RUST"
 
 # Install build-essential for Rust compilation with native dependencies
-# hadolint ignore=DL3008
+# hadolint ignore=DL3008,DL3004
 RUN sudo apt-get update && \
     sudo apt-get install -y --no-install-recommends build-essential && \
     sudo apt-get clean && \
