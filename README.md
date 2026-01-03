@@ -47,8 +47,19 @@ dast1968/slough-dev-dc-rust:1.0.0
 
 You can also run the container directly with Docker:
 
+**On Linux/macOS:**
 ```bash
 docker run -it --rm -v $(pwd):/workspace -w /workspace dast1968/slough-dev-dc-rust:1.0.0
+```
+
+**On Windows PowerShell:**
+```powershell
+docker run -it --rm -v ${PWD}:/workspace -w /workspace dast1968/slough-dev-dc-rust:1.0.0
+```
+
+**On Windows Command Prompt:**
+```cmd
+docker run -it --rm -v %cd%:/workspace -w /workspace dast1968/slough-dev-dc-rust:1.0.0
 ```
 
 ## Container Configuration
@@ -190,7 +201,7 @@ rustup show
 #### Common Windows Issues and Solutions
 
 **Issue**: Slow file system performance
-- **Solution**: Store your code in the WSL 2 file system (`\\wsl$\Ubuntu\home\username\`) rather than Windows file system (`C:\`)
+- **Solution**: Store your code in the WSL 2 file system (`\\wsl$\<distribution>\home\<username>\`, e.g., `\\wsl$\Ubuntu\home\john\`) rather than Windows file system (`C:\`)
 
 **Issue**: Line ending conflicts
 - **Solution**: Configure Git to handle line endings:
