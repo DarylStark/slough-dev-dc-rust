@@ -1,10 +1,17 @@
 # hadolint ignore=DL3007
-FROM dast1986/slough-dev-dc-generic-base:latest AS base
+FROM dast1986/slough-dev-dc-generic-base:1.0.0 AS base
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # Configure Starship
 ENV PROMPTNAME="RUST"
+
+# Install build-essential for Rust compilation with native dependencies
+# hadolint ignore=DL3008,DL3004
+RUN sudo apt-get update && \
+    sudo apt-get install -y --no-install-recommends build-essential && \
+    sudo apt-get clean && \
+    sudo rm -rf /var/lib/apt/lists/*
 
 # Download and install Rustup
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
